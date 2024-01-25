@@ -15,8 +15,41 @@ distribution = true
 
 
 [tool.pdm.dev-dependencies]
-dev = [
-    "pytest>=7.4.4",
-]
+dev = ["pytest>=7.4.4"]
 [tool.setuptools]
 py-modules = []
+
+
+[tool.black] # https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html
+line-length = 100
+skip-string-normalization = 1
+
+[tool.ruff]
+line-length = 100
+show-source = true
+fix = true
+show-fixes = true
+extend-select = [
+    "W",   # pycodestyle Warning
+    "I",   # isort
+    "N",   # pep8-naming
+    "S",   # flake8-bandit
+    "PTH", # flake8-use-pathlib
+    "PGH", # pygrep-hooks
+    "TRY", # tryceratops
+]
+ignore = [
+    "E501",   # line-too-long
+    "S101",   # Use of `assert` detected
+    "TRY003", # raise-vanilla-args
+    # "TRY400", # error-instead-of-exception
+    "PGH001",
+    "S307",
+]
+
+# upload_to_repository
+[tool.ruff.lint.isort]
+# https://beta.ruff.rs/docs/settings/#isort
+force-single-line = true
+lines-after-imports = 2
+known-local-folder = []
