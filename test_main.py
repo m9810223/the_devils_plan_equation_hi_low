@@ -1,8 +1,8 @@
 import pytest
 
-from main import calculate_all
-from main import calculate_one
-from main import str_sqrt
+from public.main import calculate_all
+from public.main import calculate_one
+from public.main import str_sqrt
 
 
 @pytest.mark.parametrize(
