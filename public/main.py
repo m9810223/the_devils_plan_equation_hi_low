@@ -11,6 +11,7 @@ total: 52
 '''
 
 
+import json
 import logging
 from itertools import chain
 from itertools import permutations
@@ -19,7 +20,6 @@ from itertools import takewhile
 from itertools import zip_longest
 from math import sqrt
 from pprint import pformat
-import json
 
 
 logger = logging.getLogger(__name__)
