@@ -40,5 +40,5 @@ def test_calculate_one(signs: str, nums: tuple[str, ...], expected: float):
 )
 def test_main(signs: str, nums: tuple[str, ...], expected: float):
     bigs, smalls = calculate_all(list(signs), list(nums))
-    big, small = bigs[0], smalls[0]
+    big, small = sorted(bigs.items())[0], sorted(smalls.items())[0]
     assert expected == big[1] if big < small else small[1]
