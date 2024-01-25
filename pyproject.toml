@@ -1,7 +1,7 @@
 [project]
 name = "the_devils_plan_equation_hi_low"
 version = "0.1.0"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.11,<3.12"
 license = { text = "MIT" }
 dependencies = []
 
