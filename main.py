@@ -9,10 +9,14 @@ total: 52
 
 第一輪下注：有三張數字時
 '''
-
-from math import sqrt as sqrt
-from itertools import permutations, product, chain, zip_longest, takewhile
 import logging
+from itertools import chain
+from itertools import permutations
+from itertools import product
+from itertools import takewhile
+from itertools import zip_longest
+from math import sqrt
+
 
 logger = logging.getLogger(__name__)
 
@@ -51,14 +55,14 @@ def calculate_one(signs: tuple[str, ...], nums: tuple[str, ...]):
 def calculate_all(signs: list[str], nums: list[str]):
     # [validation]
     if set(signs) > SIGNS or set(nums) > NUMS:
-        return
+        raise ValueError
     if len(nums) != 4:
-        return
+        raise ValueError
     if SpecialSign.rt in signs:
         if len(signs) != 4:
-            return
+            raise ValueError
     elif len(signs) != 3:
-        return
+        raise ValueError
     # [preparation]
     perm_signs = permutations(x for x in signs if x != SpecialSign.rt)
     perm_nums = (
@@ -73,7 +77,10 @@ def calculate_all(signs: list[str], nums: list[str]):
     bigs: list[tuple[float, float, str]] = []
     smalls: list[tuple[float, float, str]] = []
     for s, n in product(perm_signs, perm_nums):
-        result, calculation = calculate_one(s, n)
+        try:
+            result, calculation = calculate_one(s, n)
+        except ZeroDivisionError:
+            continue
         bigs.append((abs(TARGET_BIG - result), result, calculation))
         smalls.append((abs(TARGET_SMALL - result), result, calculation))
     bigs.sort()
