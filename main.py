@@ -9,6 +9,8 @@ total: 52
 
 第一輪下注：有三張數字時
 '''
+
+
 import logging
 from itertools import chain
 from itertools import permutations
@@ -16,6 +18,7 @@ from itertools import product
 from itertools import takewhile
 from itertools import zip_longest
 from math import sqrt
+from pprint import pformat
 
 
 logger = logging.getLogger(__name__)
@@ -42,13 +45,13 @@ def str_sqrt(n: str):
     return str(sqrt(int(n)))
 
 
+def _format_float(f: float):
+    return int(f) if f.is_integer() else round(f, 3)  # just ok
+
+
 def calculate_one(signs: tuple[str, ...], nums: tuple[str, ...]):
     calculation = ' '.join(takewhile(bool, chain.from_iterable(zip_longest(nums, signs))))
-    result = float(eval(calculation))
-    if result.is_integer():
-        result = int(result)
-    else:
-        result = round(result, 3)  # just ok
+    result = _format_float(float(eval(calculation)))
     return result, calculation
 
 
@@ -74,20 +77,29 @@ def calculate_all(signs: list[str], nums: list[str]):
         else permutations(nums)
     )
     # [calculation]
-    bigs: list[tuple[float, float, str]] = []
-    smalls: list[tuple[float, float, str]] = []
+    bigs: dict[float, list[tuple[float, str]]] = {}
+    smalls: dict[float, list[tuple[float, str]]] = {}
     for s, n in product(perm_signs, perm_nums):
         try:
             result, calculation = calculate_one(s, n)
         except ZeroDivisionError:
             continue
-        bigs.append((abs(TARGET_BIG - result), result, calculation))
-        smalls.append((abs(TARGET_SMALL - result), result, calculation))
-    bigs.sort()
-    smalls.sort()
+        _key_big = _format_float(abs(TARGET_BIG - result))
+        bigs[_key_big] = bigs.get(_key_big, [])
+        bigs[_key_big].append((result, calculation))
+        _key_small = _format_float(abs(TARGET_SMALL - result))
+        smalls[_key_small] = bigs.get(_key_big, [])
+        smalls[_key_small].append((result, calculation))
     return bigs, smalls
+
+
+def pick_one_calculation(d: dict[float, list[tuple[float, str]]]):
+    return sorted((k, *v[0]) for k, v in d.items())
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(message)s', level=logging.DEBUG)
-    print(calculate_all(['+', '-', '/'], ['1', '2', '3', '4']))
+    bigs, smalls = calculate_all(list('*/-r'), ['10', '6', ('4'), '9'])
+    big_list, smalls_list = pick_one_calculation(bigs), pick_one_calculation(smalls)
+    print(pformat(big_list[:5]))
+    print(pformat(smalls_list[:5]))
