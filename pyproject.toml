@@ -9,7 +9,6 @@ dependencies = []
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
-
 [tool.pdm]
 distribution = true
 
@@ -45,6 +44,7 @@ ignore = [
     # "TRY400", # error-instead-of-exception
     "PGH001",
     "S307",
+    "S311",
 ]
 
 # upload_to_repository
