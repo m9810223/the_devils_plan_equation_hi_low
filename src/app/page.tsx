@@ -59,7 +59,7 @@ export default function Page() {
                 <p>Loading...</p>
             ) : (
                 <button
-                    onClick={async () => {
+                    onClick={() => {
                         const sign = JSON.stringify('/' + sign_ref?.current?.value.trim())
                         const sqrt = JSON.stringify(JSON.stringify(sqrt_ref?.current?.checked))
                         const nums = JSON.stringify(nums_ref?.current?.value.trim())
