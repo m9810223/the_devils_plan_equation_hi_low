@@ -55,9 +55,7 @@ export default function Page() {
                 (0 ~ 10 選四，空白分隔)
             </p>
 
-            {isRunning ? (
-                <p>Running...</p>
-            ) : !isReady || isLoading ? (
+            {!isReady || isLoading ? (
                 <p>Loading...</p>
             ) : (
                 <button
@@ -67,7 +65,7 @@ export default function Page() {
                         const nums = JSON.stringify(nums_ref?.current?.value.trim())
                         console.log({sign, sqrt, nums})
                         if (!nums) {
-                            return
+                           // return
                         }
                         const code = `js_api(${sign}, ${sqrt}, ${nums}, 5, 2)`
                         console.log('code', code)
