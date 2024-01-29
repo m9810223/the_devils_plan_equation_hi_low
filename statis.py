@@ -1,4 +1,5 @@
-import time, statistics
+import statistics
+import time
 from functools import partial
 from functools import wraps
 from itertools import chain

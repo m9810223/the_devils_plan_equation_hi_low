@@ -15,7 +15,8 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en">
+        <html>
+            <title>尊嚴白隊</title>
             <body className={inter.className}>{children}</body>
         </html>
     )
