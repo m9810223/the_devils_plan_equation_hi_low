@@ -79,7 +79,7 @@ function Main() {
             <input type="button" value="shuffle" onClick={shuffle} />
 
             <p>
-                m: <input ref={mRef} defaultValue="5" />
+                m: <input ref={mRef} defaultValue="1" />
             </p>
             <p>
                 n: <input ref={nRef} defaultValue="1" />
