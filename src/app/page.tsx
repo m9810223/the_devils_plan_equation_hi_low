@@ -102,7 +102,7 @@ function Main() {
     }
     const shuffle = () => {
         signRef.current && (signRef.current.value = chance.unique(chance.character, 2, {pool: '+-*'}).join(''))
-        sqrtRef.current && (sqrtRef.current.checked = chance.bool())
+        sqrtRef.current && (sqrtRef.current.isChecked = chance.bool())
         numsRef.current && (numsRef.current.value = chance.unique(chance.integer, 4, {min: 0, max: 10}).join(' '))
         setShowResult(false)
     }
