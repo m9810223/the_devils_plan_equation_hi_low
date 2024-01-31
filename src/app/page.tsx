@@ -139,7 +139,7 @@ function Main() {
                 </HStack>
                 <HStack>
                     <Text>m:</Text>
-                    <Input width="auto" ref={mRef} defaultValue="5" />
+                    <Input width="auto" ref={mRef} defaultValue="3" />
                 </HStack>
                 <HStack>
                     <Text>n:</Text>
