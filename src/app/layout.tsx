@@ -1,8 +1,6 @@
 import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
-import './globals.css'
-
-const inter = Inter({subsets: ['latin']})
+import {Providers} from './providers'
+import {fonts} from './fonts'
 
 export const metadata: Metadata = {
     title: '尊嚴白隊',
@@ -14,8 +12,10 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html>
-            <body className={inter.className}>{children}</body>
+        <html className={fonts.rubik.variable}>
+            <body>
+                <Providers>{children}</Providers>
+            </body>
         </html>
     )
 }

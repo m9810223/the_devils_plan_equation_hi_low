@@ -1,27 +1,76 @@
 'use client'
 
-import {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {PythonProvider, usePython} from 'react-py'
 import Chance from 'chance'
+import {
+    Button,
+    Checkbox,
+    Heading,
+    HStack,
+    Input,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
+    VStack,
+} from '@chakra-ui/react'
+import styled from '@emotion/styled'
+import {DragDropContext, Draggable} from 'react-beautiful-dnd'
+import {StrictModeDroppable as Droppable} from './StrictModeDroppable'
 
 const chance = new Chance()
 
-type DiffCalcResultT = Array<[number, Array<[string, number]>]>
+type CalcResultsT = Array<[string, number]>
+type DiffCalcResultsT = Array<[number, CalcResultsT]>
 
-type DiffCalcResultProps = {dcrs: DiffCalcResultT}
+type CalcResultsProps = {crs: CalcResultsT}
+type DiffCalcResultsProps = {dcrs: DiffCalcResultsT}
 
-function DiffCalcResult({dcrs}: DiffCalcResultProps) {
-    return dcrs.map(([d, cr]) => (
-        <div key={d}>
-            <p>±{d}</p>
-            {cr.map(([c, r]) => (
-                <p key={c}>
-                    {c} = {r}
-                </p>
-            ))}
-            <br />
-        </div>
-    ))
+function CalcResults({crs}: CalcResultsProps) {
+    return (
+        <TableContainer>
+            <Table>
+                <Tbody>
+                    {crs.map(([c, r]) => (
+                        <Tr key={c}>
+                            <Td>{c}</Td>
+                            <Td>{r}</Td>
+                        </Tr>
+                    ))}
+                </Tbody>
+            </Table>
+        </TableContainer>
+    )
+}
+
+function DiffCalcResults({dcrs}: DiffCalcResultsProps) {
+    return (
+        <TableContainer>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th>diff</Th>
+                        <Th>varients</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {dcrs.map(([d, cr]) => (
+                        <Tr key={d}>
+                            <Td>±{d}</Td>
+                            <Td>
+                                <CalcResults crs={cr} />
+                            </Td>
+                        </Tr>
+                    ))}
+                </Tbody>
+            </Table>
+        </TableContainer>
+    )
 }
 
 function Main() {
@@ -66,51 +115,50 @@ function Main() {
     // render
     return (
         <>
-            <p>
-                sign: {`'/'`} and <input ref={signRef} defaultValue="+*" placeholder="*+- 三選二" />
-            </p>
-            <p>
-                sqrt: <input type="checkbox" ref={sqrtRef} defaultChecked={false} />
-            </p>
-            <p>
-                nums: <input ref={numsRef} defaultValue="0 1 2 10" placeholder="0 ~ 10 選四，空白分隔" />
-            </p>
-
-            <input type="button" value="shuffle" onClick={shuffle} />
-
-            <p>
-                m: <input ref={mRef} defaultValue="5" />
-            </p>
-            <p>
-                n: <input ref={nRef} defaultValue="1" />
-            </p>
-
-            <input
-                type="button"
-                value={isRunning ? 'running...' : 'run'}
-                disabled={isLoading || isRunning}
-                onClick={run}
-            />
-
+            <VStack align="stretch">
+                <HStack>
+                    <Text>sign:</Text>
+                    <Text>/ and</Text>
+                    <Input width="auto" ref={signRef} placeholder="*+- 三選二" defaultValue="+*" />
+                </HStack>
+                <HStack>
+                    <Text>sqrt:</Text>
+                    <Checkbox ref={sqrtRef} size="lg"></Checkbox>
+                </HStack>
+                <HStack>
+                    <Text>nums:</Text>
+                    <Input
+                        width="auto"
+                        ref={numsRef}
+                        placeholder="0 ~ 10 選四，空白分隔"
+                        defaultValue="0 1 2 10"
+                    />
+                </HStack>
+                <HStack>
+                    <Button onClick={shuffle}>shuffle</Button>
+                </HStack>
+                <HStack>
+                    <Text>m:</Text>
+                    <Input width="auto" ref={mRef} defaultValue="5" />
+                </HStack>
+                <HStack>
+                    <Text>n:</Text>
+                    <Input width="auto" ref={nRef} defaultValue="2" />
+                </HStack>
+                <HStack>
+                    <Button onClick={run} isLoading={isLoading || isRunning}>
+                        {isRunning ? 'running...' : 'run'}
+                    </Button>
+                </HStack>
+            </VStack>
             {showResult && (
-                <>
-                    <br />
-                    <br />
-                    <div>
-                        bigs:
-                        <br />
-                        <br />
-                        {stdout && <DiffCalcResult dcrs={JSON.parse(stdout).bigs} />}
-                    </div>
-                    <div>
-                        smalls:
-                        <br />
-                        <br />
-                        {stdout && <DiffCalcResult dcrs={JSON.parse(stdout).smalls} />}
-                    </div>
-                    <br />
+                <VStack align="stretch">
+                    <Heading>bigs:</Heading>
+                    {stdout && <DiffCalcResults dcrs={JSON.parse(stdout).bigs} />}
+                    <Heading>smalls</Heading>
+                    {stdout && <DiffCalcResults dcrs={JSON.parse(stdout).smalls} />}
                     {stderr && <div>stderr: {stderr}</div>}
-                </>
+                </VStack>
             )}
         </>
     )
@@ -121,5 +169,69 @@ export default function Page() {
         <PythonProvider packages={{micropip: ['pyodide-http']}}>
             <Main />
         </PythonProvider>
+    )
+}
+
+const grid = 8
+
+const QuoteItem = styled.div`
+    padding: ${grid}px;
+`
+
+function Quote({quote, index}) {
+    return (
+        <>
+            <Draggable draggableId={quote.id} index={index}>
+                {(provided) => (
+                    <QuoteItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        {quote.content}
+                    </QuoteItem>
+                )}
+            </Draggable>
+        </>
+    )
+}
+
+function QuoteApp() {
+    const initial = Array.from({length: 10}, (v, k) => k).map((k) => {
+        const custom: Quote = {
+            id: `id-${k}`,
+            content: `Quote ${k}`,
+        }
+        return custom
+    })
+    const [state, setState] = useState({quotes: initial})
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list)
+        const [removed] = result.splice(startIndex, 1)
+        result.splice(endIndex, 0, removed)
+        return result
+    }
+    function onDragEnd(result) {
+        if (!result.destination) {
+            return
+        }
+        if (result.destination.index === result.source.index) {
+            return
+        }
+        const quotes = reorder(state.quotes, result.source.index, result.destination.index)
+        setState({quotes})
+    }
+    const QuoteList = React.memo(function QuoteList({quotes}) {
+        return quotes.map((quote: QuoteType, index: number) => (
+            <Quote quote={quote} index={index} key={quote.id} />
+        ))
+    })
+    return (
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+                {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                        <QuoteList quotes={state.quotes} />
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+        </DragDropContext>
     )
 }
