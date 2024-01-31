@@ -39,7 +39,7 @@ function CalcResults({crs}: CalcResultsProps) {
                     {crs.map(([c, r]) => (
                         <Tr key={c}>
                             <Td>{c}</Td>
-                            <Td>{r}</Td>
+                            <Td isNumeric>{r}</Td>
                         </Tr>
                     ))}
                 </Tbody>
