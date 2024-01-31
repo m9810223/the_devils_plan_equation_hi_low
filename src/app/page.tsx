@@ -52,12 +52,6 @@ function DiffCalcResults({dcrs}: DiffCalcResultsProps) {
     return (
         <TableContainer>
             <Table>
-                <Thead>
-                    <Tr>
-                        <Th>diff</Th>
-                        <Th>varients</Th>
-                    </Tr>
-                </Thead>
                 <Tbody>
                     {dcrs.map(([d, cr]) => (
                         <Tr key={d}>
@@ -153,9 +147,9 @@ function Main() {
             </VStack>
             {showResult && (
                 <VStack align="stretch">
-                    <Heading>bigs:</Heading>
+                    <Heading>Big</Heading>
                     {stdout && <DiffCalcResults dcrs={JSON.parse(stdout).bigs} />}
-                    <Heading>smalls</Heading>
+                    <Heading>Small</Heading>
                     {stdout && <DiffCalcResults dcrs={JSON.parse(stdout).smalls} />}
                     {stderr && <div>stderr: {stderr}</div>}
                 </VStack>
