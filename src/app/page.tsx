@@ -102,7 +102,7 @@ function Main() {
     }
     const shuffle = () => {
         signRef.current && (signRef.current.value = chance.unique(chance.character, 2, {pool: '+-*'}).join(''))
-        sqrtRef.current && (sqrtRef.current.isChecked = chance.bool())
+        // sqrtRef.current && (sqrtRef.current.checked = chance.bool())
         numsRef.current && (numsRef.current.value = chance.unique(chance.integer, 4, {min: 0, max: 10}).join(' '))
         setShowResult(false)
     }
@@ -166,66 +166,68 @@ export default function Page() {
     )
 }
 
+/*
 const grid = 8
 
 const QuoteItem = styled.div`
     padding: ${grid}px;
 `
 
-// function Quote({quote, index}) {
-//     return (
-//         <>
-//             <Draggable draggableId={quote.id} index={index}>
-//                 {(provided) => (
-//                     <QuoteItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-//                         {quote.content}
-//                     </QuoteItem>
-//                 )}
-//             </Draggable>
-//         </>
-//     )
-// }
+function Quote({quote, index}) {
+    return (
+        <>
+            <Draggable draggableId={quote.id} index={index}>
+                {(provided) => (
+                    <QuoteItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        {quote.content}
+                    </QuoteItem>
+                )}
+            </Draggable>
+        </>
+    )
+}
 
-// function QuoteApp() {
-//     const initial = Array.from({length: 10}, (v, k) => k).map((k) => {
-//         const custom: Quote = {
-//             id: `id-${k}`,
-//             content: `Quote ${k}`,
-//         }
-//         return custom
-//     })
-//     const [state, setState] = useState({quotes: initial})
-//     const reorder = (list, startIndex, endIndex) => {
-//         const result = Array.from(list)
-//         const [removed] = result.splice(startIndex, 1)
-//         result.splice(endIndex, 0, removed)
-//         return result
-//     }
-//     function onDragEnd(result) {
-//         if (!result.destination) {
-//             return
-//         }
-//         if (result.destination.index === result.source.index) {
-//             return
-//         }
-//         const quotes = reorder(state.quotes, result.source.index, result.destination.index)
-//         setState({quotes})
-//     }
-//     const QuoteList = React.memo(function QuoteList({quotes}) {
-//         return quotes.map((quote: QuoteType, index: number) => (
-//             <Quote quote={quote} index={index} key={quote.id} />
-//         ))
-//     })
-//     return (
-//         <DragDropContext onDragEnd={onDragEnd}>
-//             <Droppable droppableId="list">
-//                 {(provided) => (
-//                     <div ref={provided.innerRef} {...provided.droppableProps}>
-//                         <QuoteList quotes={state.quotes} />
-//                         {provided.placeholder}
-//                     </div>
-//                 )}
-//             </Droppable>
-//         </DragDropContext>
-//     )
-// }
+function QuoteApp() {
+    const initial = Array.from({length: 10}, (v, k) => k).map((k) => {
+        const custom: Quote = {
+            id: `id-${k}`,
+            content: `Quote ${k}`,
+        }
+        return custom
+    })
+    const [state, setState] = useState({quotes: initial})
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list)
+        const [removed] = result.splice(startIndex, 1)
+        result.splice(endIndex, 0, removed)
+        return result
+    }
+    function onDragEnd(result) {
+        if (!result.destination) {
+            return
+        }
+        if (result.destination.index === result.source.index) {
+            return
+        }
+        const quotes = reorder(state.quotes, result.source.index, result.destination.index)
+        setState({quotes})
+    }
+    const QuoteList = React.memo(function QuoteList({quotes}) {
+        return quotes.map((quote: QuoteType, index: number) => (
+            <Quote quote={quote} index={index} key={quote.id} />
+        ))
+    })
+    return (
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+                {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                        <QuoteList quotes={state.quotes} />
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+        </DragDropContext>
+    )
+}
+*/
